@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFD - Don't Forget Dream</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* 배경 애니메이션 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* 헤더 */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 플로팅 요소들 */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* 섹션 공통 스타일 */
+        .section {
+            padding: 100px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 프로젝트 섹션 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .project-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* 철학 섹션 */
+        .philosophy {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            margin: 50px 0;
+            padding: 80px 0;
+        }
+
+        .philosophy-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .philosophy-quote {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* 푸터 */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 80px 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 배경 애니메이션 -->
+    <div class="bg-animation"></div>
+    <div class="stars"></div>
+
+    <!-- 헤더 -->
+    <header>
+        <nav>
+            <div class="logo">DFD</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#philosophy">Philosophy</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 히어로 섹션 -->
+    <section id="home" class="hero">
+        <div class="floating-elements">
+            <div class="floating-element" style="top: 10%; left: 10%; font-size: 2rem;">💭</div>
+            <div class="floating-element" style="top: 20%; right: 15%; font-size: 1.5rem;">⭐</div>
+            <div class="floating-element" style="bottom: 30%; left: 20%; font-size: 2.5rem;">🚀</div>
+            <div class="floating-element" style="bottom: 20%; right: 10%; font-size: 1.8rem;">✨</div>
+        </div>
+        
+        <div class="hero-content">
+            <h1>Don't Forget Dream</h1>
+            <div class="hero-subtitle">꿈을 잊지 말고, 계속해서 도전하다</div>
+            <p class="hero-description">
+                어릴 적 가졌던 소중한 꿈들을 현실로 만들어가는 창작 스튜디오입니다.<br>
+                소설, 게임, 앱 개발을 통해 상상을 현실로 바꿔나갑니다.
+            </p>
+            <a href="#projects" class="cta-button">프로젝트 보기</a>
+        </div>
+    </section>
+
+    <!-- 프로젝트 섹션 -->
+    <section id="projects" class="section">
+        <h2>Our Dreams in Action</h2>
+        <div class="projects-grid">
+            <div class="project-card fade-in">
+                <div class="project-icon">📚</div>
+                <h3>소설 쓰기</h3>
+                <p>상상 속 이야기들을 글로 풀어내며, 독자들에게 감동과 영감을 전달하는 창작 활동을 하고 있습니다. 매일 조금씩이라도 이야기를 써나가며 작가의 꿈을 실현해나가고 있습니다.</p>
+            </div>
+            
+            <div class="project-card fade-in">
+                <div class="project-icon">🎮</div>
+                <h3>게임 개발</h3>
+                <p>플레이어들에게 재미있는 경험과 특별한 순간을 선사하는 게임을 만들고 있습니다. 독창적인 아이디어와 몰입감 있는 스토리텔링으로 기억에 남는 게임을 개발합니다.</p>
+            </div>
+            
+            <div class="project-card fade-in">
+                <div class="project-icon">📱</div>
+                <h3>기능성 앱 개발</h3>
+                <p>사용자의 일상을 더 편리하고 효율적으로 만들어주는 실용적인 모바일 애플리케이션을 개발하고 있습니다. 사용자 경험을 최우선으로 생각하며 혁신적인 솔루션을 제공합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 철학 섹션 -->
+    <section id="philosophy" class="philosophy">
+        <div class="section">
+            <h2>Our Philosophy</h2>
+            <div class="philosophy-content fade-in">
+                <div class="philosophy-quote">
+                    "꿈은 나이가 들수록 잊혀지기 쉽지만,<br>
+                    우리는 그 꿈들을 기억하고 실현해나간다.<br><br>
+                    매일의 작은 도전이 모여<br>
+                    큰 변화를 만들어낸다고 믿습니다."
+                </div>
+                <p>DFD는 단순히 'Don't Forget Dream'의 줄임말이 아닙니다. 이는 우리의 삶의 철학이자 매일의 다짐입니다. 어린 시절 품었던 순수한 꿈들을 성인이 되어서도 포기하지 않고, 계속해서 도전하며 실현해나가는 것이 우리의 목표입니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 연락처 섹션 -->
+    <section id="contact" class="section">
+        <h2>Connect With Us</h2>
+        <div style="text-align: center;">
+            <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
+                함께 꿈을 이루어나갈 동료들을 찾고 있습니다.<br>
+                언제든 연락주세요!
+            </p>
+            <div style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; display: inline-block; padding: 1rem 2rem; border-radius: 10px; font-weight: bold;">
+                📧 contact@dfd365.com
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#projects">Projects</a>
+                <a href="#philosophy">Philosophy</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p>&copy; 2025 DFD (Don't Forget Dream). All rights reserved.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">꿈을 잊지 말고, 계속해서 도전하다</p>
+        </div>
+    </footer>
+
+    <script>
+        // 별 생성
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 100;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 스크롤 애니메이션
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // 부드러운 스크롤
+        function smoothScroll() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // 헤더 스크롤 효과
+        function handleHeaderScroll() {
+            const header = document.querySelector('header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(255, 255, 255, 0.98)';
+                    header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+                } else {
+                    header.style.background = 'rgba(255, 255, 255, 0.95)';
+                    header.style.boxShadow = 'none';
+                }
+            });
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            smoothScroll();
+            handleHeaderScroll();
+            handleScrollAnimations();
+            
+            window.addEventListener('scroll', handleScrollAnimations);
+            
+            // 페이지 로드 후 약간의 지연을 두고 애니메이션 시작
+            setTimeout(() => {
+                handleScrollAnimations();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
