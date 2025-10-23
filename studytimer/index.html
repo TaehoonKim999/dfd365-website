@@ -20,10 +20,69 @@
             min-height: 100vh;
         }
 
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 100px 20px 20px;
         }
 
         header {
@@ -166,19 +225,40 @@
             .content {
                 padding: 20px;
             }
+
+            .language-switcher {
+                gap: 0.3rem;
+            }
+
+            .lang-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">DFD</a>
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="changeLanguage('ko')">한국어</button>
+                <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" onclick="changeLanguage('ja')">日本語</button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <header>
             <h1>⏰ StudyTimer</h1>
-            <p>과학적 학습 방법론을 기반으로 한 스마트 타이머 앱</p>
+            <p data-lang-key="header_subtitle">과학적 학습 방법론을 기반으로 한 스마트 타이머 앱</p>
         </header>
 
         <div class="content">
-            <h2>📱 앱 소개</h2>
-            <p style="font-size: 1.1em; margin: 20px 0;">
+            <h2 data-lang-key="section_intro">📱 앱 소개</h2>
+            <p style="font-size: 1.1em; margin: 20px 0;" data-lang-key="intro_text">
                 StudyTimer는 뽀모도로, Flowtime, 52/17 규칙 등 5가지 과학적 학습 모드를 제공하는
                 Android 타이머 앱입니다. 부모-자녀 연결 기능을 통해 학습 진도를 실시간으로
                 모니터링할 수 있으며, 고급 통계 분석으로 효과적인 학습 습관을 만들어갑니다.
@@ -187,92 +267,92 @@
             <div class="features">
                 <div class="feature-card">
                     <div class="emoji">🎯</div>
-                    <h3>5가지 학습 모드</h3>
-                    <p>뽀모도로, Flowtime, 52/17 규칙, 울트라디언 리듬, 커스텀 모드</p>
+                    <h3 data-lang-key="feature1_title">5가지 학습 모드</h3>
+                    <p data-lang-key="feature1_desc">뽀모도로, Flowtime, 52/17 규칙, 울트라디언 리듬, 커스텀 모드</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="emoji">👨‍👩‍👧‍👦</div>
-                    <h3>부모-자녀 연결</h3>
-                    <p>초대 코드로 간편 연결, 실시간 학습 모니터링</p>
+                    <h3 data-lang-key="feature2_title">부모-자녀 연결</h3>
+                    <p data-lang-key="feature2_desc">초대 코드로 간편 연결, 실시간 학습 모니터링</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="emoji">📊</div>
-                    <h3>고급 통계 분석</h3>
-                    <p>모드별 성과 추적, 학습 패턴 분석, 개인화 추천</p>
+                    <h3 data-lang-key="feature3_title">고급 통계 분석</h3>
+                    <p data-lang-key="feature3_desc">모드별 성과 추적, 학습 패턴 분석, 개인화 추천</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="emoji">🔔</div>
-                    <h3>스마트 알림</h3>
-                    <p>실시간 푸시 알림, 목표 달성 알림, 응원 메시지</p>
+                    <h3 data-lang-key="feature4_title">스마트 알림</h3>
+                    <p data-lang-key="feature4_desc">실시간 푸시 알림, 목표 달성 알림, 응원 메시지</p>
                 </div>
             </div>
 
-            <h2 style="margin-top: 60px;">🎨 학습 모드</h2>
+            <h2 style="margin-top: 60px;" data-lang-key="section_modes">🎨 학습 모드</h2>
             <div class="modes">
                 <div class="mode-card">
-                    <h4>🍅 뽀모도로</h4>
-                    <p>25분 집중 + 5분 휴식<br>4사이클 후 긴 휴식</p>
+                    <h4 data-lang-key="mode1_title">🍅 뽀모도로</h4>
+                    <p data-lang-key="mode1_desc">25분 집중 + 5분 휴식<br>4사이클 후 긴 휴식</p>
                 </div>
 
                 <div class="mode-card">
-                    <h4>🌊 Flowtime</h4>
-                    <p>자유 집중 시간<br>자동 휴식 계산 (1/5 비율)</p>
+                    <h4 data-lang-key="mode2_title">🌊 Flowtime</h4>
+                    <p data-lang-key="mode2_desc">자유 집중 시간<br>자동 휴식 계산 (1/5 비율)</p>
                 </div>
 
                 <div class="mode-card">
-                    <h4>⏰ 52/17 규칙</h4>
-                    <p>52분 집중 + 17분 휴식<br>DeskTime 연구 기반</p>
+                    <h4 data-lang-key="mode3_title">⏰ 52/17 규칙</h4>
+                    <p data-lang-key="mode3_desc">52분 집중 + 17분 휴식<br>DeskTime 연구 기반</p>
                 </div>
 
                 <div class="mode-card">
-                    <h4>🔄 울트라디언 리듬</h4>
-                    <p>90분 집중 + 20분 휴식<br>생체 리듬 기반</p>
+                    <h4 data-lang-key="mode4_title">🔄 울트라디언 리듬</h4>
+                    <p data-lang-key="mode4_desc">90분 집중 + 20분 휴식<br>생체 리듬 기반</p>
                 </div>
 
                 <div class="mode-card">
-                    <h4>🎨 커스텀</h4>
-                    <p>1-90분 학습<br>1-30분 휴식 자유 설정</p>
+                    <h4 data-lang-key="mode5_title">🎨 커스텀</h4>
+                    <p data-lang-key="mode5_desc">1-90분 학습<br>1-30분 휴식 자유 설정</p>
                 </div>
             </div>
 
             <div class="specs">
-                <h2>📋 앱 사양</h2>
+                <h2 data-lang-key="section_specs">📋 앱 사양</h2>
                 <ul>
-                    <li><strong>버전:</strong> 1.1</li>
-                    <li><strong>플랫폼:</strong> Android</li>
-                    <li><strong>최소 버전:</strong> Android 7.0 (API 24) 이상</li>
-                    <li><strong>권장 버전:</strong> Android 14 (API 36) 이상</li>
-                    <li><strong>언어 지원:</strong> 한국어, 영어, 일본어, 중국어</li>
-                    <li><strong>가격:</strong> 무료 (프리미엄 기능 앱 내 결제)</li>
-                    <li><strong>크기:</strong> 약 15MB</li>
+                    <li><strong data-lang-key="spec_version">버전:</strong> 1.1</li>
+                    <li><strong data-lang-key="spec_platform">플랫폼:</strong> Android</li>
+                    <li><strong data-lang-key="spec_min">최소 버전:</strong> Android 7.0 (API 24) <span data-lang-key="or_higher">이상</span></li>
+                    <li><strong data-lang-key="spec_recommended">권장 버전:</strong> Android 14 (API 36) <span data-lang-key="or_higher">이상</span></li>
+                    <li><strong data-lang-key="spec_languages">언어 지원:</strong> <span data-lang-key="spec_languages_list">한국어, 영어, 일본어, 중국어</span></li>
+                    <li><strong data-lang-key="spec_price">가격:</strong> <span data-lang-key="spec_price_text">무료 (프리미엄 기능 앱 내 결제)</span></li>
+                    <li><strong data-lang-key="spec_size">크기:</strong> <span data-lang-key="spec_size_value">약 15MB</span></li>
                 </ul>
             </div>
         </div>
 
         <div class="download-section">
-            <h2>📲 지금 다운로드하세요</h2>
-            <p style="margin: 20px 0;">Google Play에서 무료로 다운로드 가능합니다</p>
-            <a href="https://play.google.com/store/apps/details?id=com.dfd365.studytimer" class="download-btn">
+            <h2 data-lang-key="download_title">📲 지금 다운로드하세요</h2>
+            <p style="margin: 20px 0;" data-lang-key="download_desc">Google Play에서 무료로 다운로드 가능합니다</p>
+            <a href="https://play.google.com/store/apps/details?id=com.dfd365.studytimer" class="download-btn" data-lang-key="download_btn">
                 Google Play에서 다운로드
             </a>
         </div>
 
         <div class="content">
-            <h2>🔒 개인정보 보호</h2>
-            <p style="margin: 20px 0;">
+            <h2 data-lang-key="section_privacy">🔒 개인정보 보호</h2>
+            <p style="margin: 20px 0;" data-lang-key="privacy_text">
                 StudyTimer는 사용자의 개인정보를 안전하게 보호합니다.
                 Firebase를 통한 안전한 데이터 저장, 암호화된 통신, 최소한의 권한 요청으로
                 개인정보 보호를 최우선으로 합니다.
             </p>
             <p>
-                <a href="/privacy-policy.html" style="color: #667eea; text-decoration: none; font-weight: bold;">
+                <a href="/privacy-policy.html" style="color: #667eea; text-decoration: none; font-weight: bold;" data-lang-key="privacy_link">
                     📄 개인정보처리방침 보기 →
                 </a>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                <a href="/terms-of-service.html" style="color: #667eea; text-decoration: none; font-weight: bold;">
+                <a href="/terms-of-service.html" style="color: #667eea; text-decoration: none; font-weight: bold;" data-lang-key="terms_link">
                     📜 서비스 이용약관 보기 →
                 </a>
             </p>
@@ -281,12 +361,208 @@
         <footer>
             <p>&copy; 2025 DFD365. All rights reserved.</p>
             <p>
-                <a href="/">홈</a> |
-                <a href="/privacy-policy.html">개인정보처리방침</a> |
-                <a href="/terms-of-service.html">이용약관</a> |
-                <a href="mailto:support@dfd365.com">문의하기</a>
+                <a href="/" data-lang-key="footer_home">홈</a> |
+                <a href="/privacy-policy.html" data-lang-key="footer_privacy">개인정보처리방침</a> |
+                <a href="/terms-of-service.html" data-lang-key="footer_terms">이용약관</a> |
+                <a href="mailto:support@dfd365.com" data-lang-key="footer_contact">문의하기</a>
             </p>
         </footer>
     </div>
+
+    <script>
+        // 다중 언어 지원
+        const translations = {
+            ko: {
+                header_subtitle: "과학적 학습 방법론을 기반으로 한 스마트 타이머 앱",
+                section_intro: "📱 앱 소개",
+                intro_text: "StudyTimer는 뽀모도로, Flowtime, 52/17 규칙 등 5가지 과학적 학습 모드를 제공하는 Android 타이머 앱입니다. 부모-자녀 연결 기능을 통해 학습 진도를 실시간으로 모니터링할 수 있으며, 고급 통계 분석으로 효과적인 학습 습관을 만들어갑니다.",
+                feature1_title: "5가지 학습 모드",
+                feature1_desc: "뽀모도로, Flowtime, 52/17 규칙, 울트라디언 리듬, 커스텀 모드",
+                feature2_title: "부모-자녀 연결",
+                feature2_desc: "초대 코드로 간편 연결, 실시간 학습 모니터링",
+                feature3_title: "고급 통계 분석",
+                feature3_desc: "모드별 성과 추적, 학습 패턴 분석, 개인화 추천",
+                feature4_title: "스마트 알림",
+                feature4_desc: "실시간 푸시 알림, 목표 달성 알림, 응원 메시지",
+                section_modes: "🎨 학습 모드",
+                mode1_title: "🍅 뽀모도로",
+                mode1_desc: "25분 집중 + 5분 휴식<br>4사이클 후 긴 휴식",
+                mode2_title: "🌊 Flowtime",
+                mode2_desc: "자유 집중 시간<br>자동 휴식 계산 (1/5 비율)",
+                mode3_title: "⏰ 52/17 규칙",
+                mode3_desc: "52분 집중 + 17분 휴식<br>DeskTime 연구 기반",
+                mode4_title: "🔄 울트라디언 리듬",
+                mode4_desc: "90분 집중 + 20분 휴식<br>생체 리듬 기반",
+                mode5_title: "🎨 커스텀",
+                mode5_desc: "1-90분 학습<br>1-30분 휴식 자유 설정",
+                section_specs: "📋 앱 사양",
+                spec_version: "버전:",
+                spec_platform: "플랫폼:",
+                spec_min: "최소 버전:",
+                spec_recommended: "권장 버전:",
+                spec_languages: "언어 지원:",
+                spec_languages_list: "한국어, 영어, 일본어, 중국어",
+                spec_price: "가격:",
+                spec_price_text: "무료 (프리미엄 기능 앱 내 결제)",
+                spec_size: "크기:",
+                spec_size_value: "약 15MB",
+                or_higher: "이상",
+                download_title: "📲 지금 다운로드하세요",
+                download_desc: "Google Play에서 무료로 다운로드 가능합니다",
+                download_btn: "Google Play에서 다운로드",
+                section_privacy: "🔒 개인정보 보호",
+                privacy_text: "StudyTimer는 사용자의 개인정보를 안전하게 보호합니다. Firebase를 통한 안전한 데이터 저장, 암호화된 통신, 최소한의 권한 요청으로 개인정보 보호를 최우선으로 합니다.",
+                privacy_link: "📄 개인정보처리방침 보기 →",
+                terms_link: "📜 서비스 이용약관 보기 →",
+                footer_home: "홈",
+                footer_privacy: "개인정보처리방침",
+                footer_terms: "이용약관",
+                footer_contact: "문의하기"
+            },
+            en: {
+                header_subtitle: "Smart timer app based on scientific learning methodologies",
+                section_intro: "📱 App Introduction",
+                intro_text: "StudyTimer is an Android timer app offering 5 scientific study modes including Pomodoro, Flowtime, and 52/17 rule. Monitor study progress in real-time with parent-child connection features and build effective study habits with advanced statistical analysis.",
+                feature1_title: "5 Study Modes",
+                feature1_desc: "Pomodoro, Flowtime, 52/17 Rule, Ultradian Rhythm, Custom Mode",
+                feature2_title: "Parent-Child Connection",
+                feature2_desc: "Easy connection with invitation code, real-time study monitoring",
+                feature3_title: "Advanced Statistics",
+                feature3_desc: "Track performance by mode, analyze study patterns, personalized recommendations",
+                feature4_title: "Smart Notifications",
+                feature4_desc: "Real-time push notifications, goal achievement alerts, encouragement messages",
+                section_modes: "🎨 Study Modes",
+                mode1_title: "🍅 Pomodoro",
+                mode1_desc: "25min focus + 5min break<br>Long break after 4 cycles",
+                mode2_title: "🌊 Flowtime",
+                mode2_desc: "Flexible focus time<br>Auto break calculation (1/5 ratio)",
+                mode3_title: "⏰ 52/17 Rule",
+                mode3_desc: "52min focus + 17min break<br>Based on DeskTime research",
+                mode4_title: "🔄 Ultradian Rhythm",
+                mode4_desc: "90min focus + 20min break<br>Based on biological rhythm",
+                mode5_title: "🎨 Custom",
+                mode5_desc: "1-90min study<br>1-30min break customizable",
+                section_specs: "📋 App Specifications",
+                spec_version: "Version:",
+                spec_platform: "Platform:",
+                spec_min: "Minimum Version:",
+                spec_recommended: "Recommended Version:",
+                spec_languages: "Language Support:",
+                spec_languages_list: "Korean, English, Japanese, Chinese",
+                spec_price: "Price:",
+                spec_price_text: "Free (Premium features via in-app purchase)",
+                spec_size: "Size:",
+                spec_size_value: "Approx. 15MB",
+                or_higher: "or higher",
+                download_title: "📲 Download Now",
+                download_desc: "Available for free on Google Play",
+                download_btn: "Download on Google Play",
+                section_privacy: "🔒 Privacy Protection",
+                privacy_text: "StudyTimer safely protects your personal information. We prioritize privacy protection through secure data storage via Firebase, encrypted communication, and minimal permission requests.",
+                privacy_link: "📄 View Privacy Policy →",
+                terms_link: "📜 View Terms of Service →",
+                footer_home: "Home",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                footer_contact: "Contact"
+            },
+            ja: {
+                header_subtitle: "科学的な学習方法論に基づいたスマートタイマーアプリ",
+                section_intro: "📱 アプリ紹介",
+                intro_text: "StudyTimerは、ポモドーロ、Flowtime、52/17ルールなど5つの科学的学習モードを提供するAndroidタイマーアプリです。親子連携機能で学習進捗をリアルタイムでモニタリングでき、高度な統計分析で効果的な学習習慣を作ります。",
+                feature1_title: "5つの学習モード",
+                feature1_desc: "ポモドーロ、Flowtime、52/17ルール、ウルトラディアンリズム、カスタムモード",
+                feature2_title: "親子連携",
+                feature2_desc: "招待コードで簡単連携、リアルタイム学習モニタリング",
+                feature3_title: "高度な統計分析",
+                feature3_desc: "モード別成果追跡、学習パターン分析、パーソナライズされた推奨",
+                feature4_title: "スマート通知",
+                feature4_desc: "リアルタイムプッシュ通知、目標達成アラート、応援メッセージ",
+                section_modes: "🎨 学習モード",
+                mode1_title: "🍅 ポモドーロ",
+                mode1_desc: "25分集中 + 5分休憩<br>4サイクル後に長い休憩",
+                mode2_title: "🌊 Flowtime",
+                mode2_desc: "自由な集中時間<br>自動休憩計算（1/5比率）",
+                mode3_title: "⏰ 52/17ルール",
+                mode3_desc: "52分集中 + 17分休憩<br>DeskTime研究基盤",
+                mode4_title: "🔄 ウルトラディアンリズム",
+                mode4_desc: "90分集中 + 20分休憩<br>生体リズム基盤",
+                mode5_title: "🎨 カスタム",
+                mode5_desc: "1-90分学習<br>1-30分休憩自由設定",
+                section_specs: "📋 アプリ仕様",
+                spec_version: "バージョン:",
+                spec_platform: "プラットフォーム:",
+                spec_min: "最小バージョン:",
+                spec_recommended: "推奨バージョン:",
+                spec_languages: "言語サポート:",
+                spec_languages_list: "韓国語、英語、日本語、中国語",
+                spec_price: "価格:",
+                spec_price_text: "無料（プレミアム機能はアプリ内課金）",
+                spec_size: "サイズ:",
+                spec_size_value: "約15MB",
+                or_higher: "以上",
+                download_title: "📲 今すぐダウンロード",
+                download_desc: "Google Playで無料ダウンロード可能",
+                download_btn: "Google Playでダウンロード",
+                section_privacy: "🔒 個人情報保護",
+                privacy_text: "StudyTimerはユーザーの個人情報を安全に保護します。Firebaseによる安全なデータ保存、暗号化された通信、最小限の権限要求で個人情報保護を最優先にしています。",
+                privacy_link: "📄 プライバシーポリシーを見る →",
+                terms_link: "📜 利用規約を見る →",
+                footer_home: "ホーム",
+                footer_privacy: "プライバシーポリシー",
+                footer_terms: "利用規約",
+                footer_contact: "お問い合わせ"
+            }
+        };
+
+        // 현재 언어 (기본값: 한국어)
+        let currentLang = localStorage.getItem('language') || 'ko';
+
+        // 언어 변경 함수
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+
+            // 모든 번역 요소 업데이트
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // 언어 버튼 활성화 상태 변경
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // 페이지 로드 시 저장된 언어로 설정
+        function initLanguage() {
+            const lang = localStorage.getItem('language') || 'ko';
+            if (lang !== 'ko') {
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+            }
+
+            // 언어 버튼 활성화 상태 설정
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes('한국어') && lang === 'ko') btn.classList.add('active');
+                if (btn.textContent.includes('English') && lang === 'en') btn.classList.add('active');
+                if (btn.textContent.includes('日本語') && lang === 'ja') btn.classList.add('active');
+            });
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initLanguage(); // 언어 초기화
+        });
+    </script>
 </body>
 </html>
