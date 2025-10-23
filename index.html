@@ -100,6 +100,36 @@
             color: #667eea;
         }
 
+        /* 언어 선택 버튼 */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
+        }
+
         /* 히어로 섹션 */
         .hero {
             height: 100vh;
@@ -331,6 +361,15 @@
             .nav-links {
                 display: none;
             }
+
+            .language-switcher {
+                gap: 0.3rem;
+            }
+
+            .lang-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
             
             .projects-grid {
                 grid-template-columns: 1fr;
@@ -352,11 +391,16 @@
         <nav>
             <div class="logo">DFD</div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#philosophy">Philosophy</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#home" data-lang-key="nav_home">Home</a></li>
+                <li><a href="#projects" data-lang-key="nav_projects">Projects</a></li>
+                <li><a href="#philosophy" data-lang-key="nav_philosophy">Philosophy</a></li>
+                <li><a href="#contact" data-lang-key="nav_contact">Contact</a></li>
             </ul>
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="changeLanguage('ko')">한국어</button>
+                <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" onclick="changeLanguage('ja')">日本語</button>
+            </div>
         </nav>
     </header>
 
@@ -371,36 +415,36 @@
         
         <div class="hero-content">
             <h1>Don't Forget Dream</h1>
-            <div class="hero-subtitle">꿈을 잊지 말고, 계속해서 도전하다</div>
-            <p class="hero-description">
+            <div class="hero-subtitle" data-lang-key="hero_subtitle">꿈을 잊지 말고, 계속해서 도전하다</div>
+            <p class="hero-description" data-lang-key="hero_description">
                 어릴 적 가졌던 소중한 꿈들을 현실로 만들어가는 창작 스튜디오입니다.<br>
                 소설, 게임, 앱 개발을 통해 상상을 현실로 바꿔나갑니다.
             </p>
-            <a href="#projects" class="cta-button">프로젝트 보기</a>
+            <a href="#projects" class="cta-button" data-lang-key="hero_cta">프로젝트 보기</a>
         </div>
     </section>
 
     <!-- 프로젝트 섹션 -->
     <section id="projects" class="section">
-        <h2>Our Dreams in Action</h2>
+        <h2 data-lang-key="projects_title">Our Dreams in Action</h2>
         <div class="projects-grid">
             <div class="project-card fade-in">
                 <div class="project-icon">📚</div>
-                <h3>소설 쓰기</h3>
-                <p>상상 속 이야기들을 글로 풀어내며, 독자들에게 감동과 영감을 전달하는 창작 활동을 하고 있습니다. 매일 조금씩이라도 이야기를 써나가며 작가의 꿈을 실현해나가고 있습니다.</p>
+                <h3 data-lang-key="project_novel_title">소설 쓰기</h3>
+                <p data-lang-key="project_novel_desc">상상 속 이야기들을 글로 풀어내며, 독자들에게 감동과 영감을 전달하는 창작 활동을 하고 있습니다. 매일 조금씩이라도 이야기를 써나가며 작가의 꿈을 실현해나가고 있습니다.</p>
             </div>
-            
+
             <div class="project-card fade-in">
                 <div class="project-icon">🎮</div>
-                <h3>게임 개발</h3>
-                <p>플레이어들에게 재미있는 경험과 특별한 순간을 선사하는 게임을 만들고 있습니다. 독창적인 아이디어와 몰입감 있는 스토리텔링으로 기억에 남는 게임을 개발합니다.</p>
+                <h3 data-lang-key="project_game_title">게임 개발</h3>
+                <p data-lang-key="project_game_desc">플레이어들에게 재미있는 경험과 특별한 순간을 선사하는 게임을 만들고 있습니다. 독창적인 아이디어와 몰입감 있는 스토리텔링으로 기억에 남는 게임을 개발합니다.</p>
             </div>
-            
+
             <div class="project-card fade-in">
                 <div class="project-icon">📱</div>
-                <h3>기능성 앱 개발</h3>
-                <p>사용자의 일상을 더 편리하고 효율적으로 만들어주는 실용적인 모바일 애플리케이션을 개발하고 있습니다. 사용자 경험을 최우선으로 생각하며 혁신적인 솔루션을 제공합니다.</p>
-                <a href="/apps" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: transform 0.3s;">자세히 보기 →</a>
+                <h3 data-lang-key="project_app_title">기능성 앱 개발</h3>
+                <p data-lang-key="project_app_desc">사용자의 일상을 더 편리하고 효율적으로 만들어주는 실용적인 모바일 애플리케이션을 개발하고 있습니다. 사용자 경험을 최우선으로 생각하며 혁신적인 솔루션을 제공합니다.</p>
+                <a href="/apps" data-lang-key="view_more" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: transform 0.3s;">자세히 보기 →</a>
             </div>
         </div>
     </section>
@@ -408,24 +452,24 @@
     <!-- 철학 섹션 -->
     <section id="philosophy" class="philosophy">
         <div class="section">
-            <h2>Our Philosophy</h2>
+            <h2 data-lang-key="philosophy_title">Our Philosophy</h2>
             <div class="philosophy-content fade-in">
-                <div class="philosophy-quote">
+                <div class="philosophy-quote" data-lang-key="philosophy_quote">
                     "꿈은 나이가 들수록 잊혀지기 쉽지만,<br>
                     우리는 그 꿈들을 기억하고 실현해나간다.<br><br>
                     매일의 작은 도전이 모여<br>
                     큰 변화를 만들어낸다고 믿습니다."
                 </div>
-                <p>DFD는 단순히 'Don't Forget Dream'의 줄임말이 아닙니다. 이는 우리의 삶의 철학이자 매일의 다짐입니다. 어린 시절 품었던 순수한 꿈들을 성인이 되어서도 포기하지 않고, 계속해서 도전하며 실현해나가는 것이 우리의 목표입니다.</p>
+                <p data-lang-key="philosophy_desc">DFD는 단순히 'Don't Forget Dream'의 줄임말이 아닙니다. 이는 우리의 삶의 철학이자 매일의 다짐입니다. 어린 시절 품었던 순수한 꿈들을 성인이 되어서도 포기하지 않고, 계속해서 도전하며 실현해나가는 것이 우리의 목표입니다.</p>
             </div>
         </div>
     </section>
 
     <!-- 연락처 섹션 -->
     <section id="contact" class="section">
-        <h2>Connect With Us</h2>
+        <h2 data-lang-key="contact_title">Connect With Us</h2>
         <div style="text-align: center;">
-            <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
+            <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;" data-lang-key="contact_desc">
                 함께 꿈을 이루어나갈 동료들을 찾고 있습니다.<br>
                 언제든 연락주세요!
             </p>
@@ -450,6 +494,120 @@
     </footer>
 
     <script>
+        // 다중 언어 지원
+        const translations = {
+            ko: {
+                nav_home: "Home",
+                nav_projects: "Projects",
+                nav_philosophy: "Philosophy",
+                nav_contact: "Contact",
+                hero_subtitle: "꿈을 잊지 말고, 계속해서 도전하다",
+                hero_description: "어릴 적 가졌던 소중한 꿈들을 현실로 만들어가는 창작 스튜디오입니다.<br>소설, 게임, 앱 개발을 통해 상상을 현실로 바꿔나갑니다.",
+                hero_cta: "프로젝트 보기",
+                projects_title: "Our Dreams in Action",
+                project_novel_title: "소설 쓰기",
+                project_novel_desc: "상상 속 이야기들을 글로 풀어내며, 독자들에게 감동과 영감을 전달하는 창작 활동을 하고 있습니다. 매일 조금씩이라도 이야기를 써나가며 작가의 꿈을 실현해나가고 있습니다.",
+                project_game_title: "게임 개발",
+                project_game_desc: "플레이어들에게 재미있는 경험과 특별한 순간을 선사하는 게임을 만들고 있습니다. 독창적인 아이디어와 몰입감 있는 스토리텔링으로 기억에 남는 게임을 개발합니다.",
+                project_app_title: "기능성 앱 개발",
+                project_app_desc: "사용자의 일상을 더 편리하고 효율적으로 만들어주는 실용적인 모바일 애플리케이션을 개발하고 있습니다. 사용자 경험을 최우선으로 생각하며 혁신적인 솔루션을 제공합니다.",
+                view_more: "자세히 보기 →",
+                philosophy_title: "Our Philosophy",
+                philosophy_quote: "\"꿈은 나이가 들수록 잊혀지기 쉽지만,<br>우리는 그 꿈들을 기억하고 실현해나간다.<br><br>매일의 작은 도전이 모여<br>큰 변화를 만들어낸다고 믿습니다.\"",
+                philosophy_desc: "DFD는 단순히 'Don't Forget Dream'의 줄임말이 아닙니다. 이는 우리의 삶의 철학이자 매일의 다짐입니다. 어린 시절 품었던 순수한 꿈들을 성인이 되어서도 포기하지 않고, 계속해서 도전하며 실현해나가는 것이 우리의 목표입니다.",
+                contact_title: "Connect With Us",
+                contact_desc: "함께 꿈을 이루어나갈 동료들을 찾고 있습니다.<br>언제든 연락주세요!"
+            },
+            en: {
+                nav_home: "Home",
+                nav_projects: "Projects",
+                nav_philosophy: "Philosophy",
+                nav_contact: "Contact",
+                hero_subtitle: "Don't forget your dreams, keep challenging yourself",
+                hero_description: "A creative studio bringing childhood dreams to reality.<br>We turn imagination into reality through novels, games, and app development.",
+                hero_cta: "View Projects",
+                projects_title: "Our Dreams in Action",
+                project_novel_title: "Novel Writing",
+                project_novel_desc: "We write stories from our imagination, delivering inspiration and emotion to readers. We're realizing our dream as writers by writing a little bit every day.",
+                project_game_title: "Game Development",
+                project_game_desc: "Creating games that offer fun experiences and special moments to players. We develop memorable games with original ideas and immersive storytelling.",
+                project_app_title: "Functional App Development",
+                project_app_desc: "Developing practical mobile applications that make users' daily lives more convenient and efficient. We provide innovative solutions with user experience as our top priority.",
+                view_more: "Learn More →",
+                philosophy_title: "Our Philosophy",
+                philosophy_quote: "\"Dreams fade easily as we age,<br>but we remember and realize them.<br><br>We believe that small daily challenges<br>create big changes.\"",
+                philosophy_desc: "DFD is not just an abbreviation for 'Don't Forget Dream'. It's our life philosophy and daily commitment. Our goal is to never give up on the pure dreams we had as children, and to continue challenging ourselves to make them a reality.",
+                contact_title: "Connect With Us",
+                contact_desc: "We're looking for partners to achieve dreams together.<br>Feel free to contact us anytime!"
+            },
+            ja: {
+                nav_home: "ホーム",
+                nav_projects: "プロジェクト",
+                nav_philosophy: "理念",
+                nav_contact: "お問い合わせ",
+                hero_subtitle: "夢を忘れず、挑戦し続ける",
+                hero_description: "幼い頃に抱いた大切な夢を現実にする創作スタジオです。<br>小説、ゲーム、アプリ開発を通じて想像を現実に変えています。",
+                hero_cta: "プロジェクトを見る",
+                projects_title: "Our Dreams in Action",
+                project_novel_title: "小説執筆",
+                project_novel_desc: "想像の中の物語を文章で表現し、読者に感動とインスピレーションを届ける創作活動をしています。毎日少しずつでも物語を書き続け、作家の夢を実現しています。",
+                project_game_title: "ゲーム開発",
+                project_game_desc: "プレイヤーに楽しい体験と特別な瞬間を提供するゲームを作っています。独創的なアイデアと没入感のあるストーリーテリングで印象に残るゲームを開発します。",
+                project_app_title: "機能性アプリ開発",
+                project_app_desc: "ユーザーの日常をより便利で効率的にする実用的なモバイルアプリケーションを開発しています。ユーザー体験を最優先に考え、革新的なソリューションを提供します。",
+                view_more: "詳細を見る →",
+                philosophy_title: "Our Philosophy",
+                philosophy_quote: "\"夢は年を重ねるごとに忘れられがちですが、<br>私たちはその夢を覚えて実現していきます。<br><br>毎日の小さな挑戦が集まって<br>大きな変化を生み出すと信じています。\"",
+                philosophy_desc: "DFDは単に「Don't Forget Dream」の略語ではありません。これは私たちの人生哲学であり、毎日の決意です。子供の頃に抱いた純粋な夢を大人になっても諦めず、挑戦し続けて実現することが私たちの目標です。",
+                contact_title: "Connect With Us",
+                contact_desc: "一緒に夢を実現する仲間を探しています。<br>いつでもご連絡ください！"
+            }
+        };
+
+        // 현재 언어 (기본값: 한국어)
+        let currentLang = localStorage.getItem('language') || 'ko';
+
+        // 언어 변경 함수
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+
+            // 모든 번역 요소 업데이트
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // 언어 버튼 활성화 상태 변경
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // 페이지 로드 시 저장된 언어로 설정
+        function initLanguage() {
+            const lang = localStorage.getItem('language') || 'ko';
+            if (lang !== 'ko') {
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+            }
+
+            // 언어 버튼 활성화 상태 설정
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes('한국어') && lang === 'ko') btn.classList.add('active');
+                if (btn.textContent.includes('English') && lang === 'en') btn.classList.add('active');
+                if (btn.textContent.includes('日本語') && lang === 'ja') btn.classList.add('active');
+            });
+        }
+
         // 별 생성
         function createStars() {
             const starsContainer = document.querySelector('.stars');
@@ -516,13 +674,14 @@
 
         // 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            initLanguage(); // 언어 초기화
             createStars();
             smoothScroll();
             handleHeaderScroll();
             handleScrollAnimations();
-            
+
             window.addEventListener('scroll', handleScrollAnimations);
-            
+
             // 페이지 로드 후 약간의 지연을 두고 애니메이션 시작
             setTimeout(() => {
                 handleScrollAnimations();

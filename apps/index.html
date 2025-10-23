@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>기능성 앱 개발 - DFD</title>
     <style>
         * {
@@ -76,6 +76,36 @@
 
         .nav-links a:hover {
             color: #667eea;
+        }
+
+        /* 언어 선택 버튼 */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
         }
 
         /* 페이지 헤더 */
@@ -229,6 +259,15 @@
                 display: none;
             }
 
+            .language-switcher {
+                gap: 0.3rem;
+            }
+
+            .lang-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
             .apps-grid {
                 grid-template-columns: 1fr;
             }
@@ -244,18 +283,23 @@
         <nav>
             <a href="/" class="logo">DFD</a>
             <ul class="nav-links">
-                <li><a href="/#home">Home</a></li>
-                <li><a href="/#projects">Projects</a></li>
-                <li><a href="/#philosophy">Philosophy</a></li>
-                <li><a href="/#contact">Contact</a></li>
+                <li><a href="/#home" data-lang-key="nav_home">Home</a></li>
+                <li><a href="/#projects" data-lang-key="nav_projects">Projects</a></li>
+                <li><a href="/#philosophy" data-lang-key="nav_philosophy">Philosophy</a></li>
+                <li><a href="/#contact" data-lang-key="nav_contact">Contact</a></li>
             </ul>
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="changeLanguage('ko')">한국어</button>
+                <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" onclick="changeLanguage('ja')">日本語</button>
+            </div>
         </nav>
     </header>
 
     <!-- 페이지 헤더 -->
     <section class="page-header">
-        <h1>📱 기능성 앱 개발</h1>
-        <p>사용자의 일상을 더 편리하고 효율적으로 만드는 실용적인 모바일 앱</p>
+        <h1 data-lang-key="page_title">📱 기능성 앱 개발</h1>
+        <p data-lang-key="page_subtitle">사용자의 일상을 더 편리하고 효율적으로 만드는 실용적인 모바일 앱</p>
     </section>
 
     <!-- 앱 목록 섹션 -->
@@ -265,14 +309,14 @@
             <div class="app-card">
                 <div class="app-icon">⏰</div>
                 <h3>StudyTimer</h3>
-                <p>과학적 학습 방법론을 기반으로 한 스마트 타이머 앱. 뽀모도로, Flowtime, 52/17 규칙 등 5가지 학습 모드와 부모-자녀 연결 기능을 제공합니다.</p>
+                <p data-lang-key="studytimer_desc">과학적 학습 방법론을 기반으로 한 스마트 타이머 앱. 뽀모도로, Flowtime, 52/17 규칙 등 5가지 학습 모드와 부모-자녀 연결 기능을 제공합니다.</p>
                 <div class="app-tags">
                     <span class="tag">Android</span>
-                    <span class="tag">학습 관리</span>
-                    <span class="tag">타이머</span>
+                    <span class="tag" data-lang-key="tag_study">학습 관리</span>
+                    <span class="tag" data-lang-key="tag_timer">타이머</span>
                     <span class="tag">Firebase</span>
                 </div>
-                <a href="/studytimer" class="app-link">자세히 보기 →</a>
+                <a href="/studytimer" class="app-link" data-lang-key="view_more">자세히 보기 →</a>
             </div>
 
             <!-- 추가 앱 카드들이 여기에 들어갈 예정 -->
@@ -283,14 +327,108 @@
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="/">Home</a>
-                <a href="/#projects">Projects</a>
-                <a href="/#philosophy">Philosophy</a>
-                <a href="/#contact">Contact</a>
+                <a href="/" data-lang-key="nav_home">Home</a>
+                <a href="/#projects" data-lang-key="nav_projects">Projects</a>
+                <a href="/#philosophy" data-lang-key="nav_philosophy">Philosophy</a>
+                <a href="/#contact" data-lang-key="nav_contact">Contact</a>
             </div>
             <p>&copy; 2025 DFD (Don't Forget Dream). All rights reserved.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.7;">꿈을 잊지 말고, 계속해서 도전하다</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;" data-lang-key="footer_slogan">꿈을 잊지 말고, 계속해서 도전하다</p>
         </div>
     </footer>
+
+    <script>
+        // 다중 언어 지원
+        const translations = {
+            ko: {
+                nav_home: "Home",
+                nav_projects: "Projects",
+                nav_philosophy: "Philosophy",
+                nav_contact: "Contact",
+                page_title: "📱 기능성 앱 개발",
+                page_subtitle: "사용자의 일상을 더 편리하고 효율적으로 만드는 실용적인 모바일 앱",
+                studytimer_desc: "과학적 학습 방법론을 기반으로 한 스마트 타이머 앱. 뽀모도로, Flowtime, 52/17 규칙 등 5가지 학습 모드와 부모-자녀 연결 기능을 제공합니다.",
+                tag_study: "학습 관리",
+                tag_timer: "타이머",
+                view_more: "자세히 보기 →",
+                footer_slogan: "꿈을 잊지 말고, 계속해서 도전하다"
+            },
+            en: {
+                nav_home: "Home",
+                nav_projects: "Projects",
+                nav_philosophy: "Philosophy",
+                nav_contact: "Contact",
+                page_title: "📱 Functional App Development",
+                page_subtitle: "Practical mobile apps that make users' daily lives more convenient and efficient",
+                studytimer_desc: "A smart timer app based on scientific learning methodologies. Offers 5 study modes including Pomodoro, Flowtime, 52/17 rule, and parent-child connection features.",
+                tag_study: "Study Management",
+                tag_timer: "Timer",
+                view_more: "Learn More →",
+                footer_slogan: "Don't forget your dreams, keep challenging yourself"
+            },
+            ja: {
+                nav_home: "ホーム",
+                nav_projects: "プロジェクト",
+                nav_philosophy: "理念",
+                nav_contact: "お問い合わせ",
+                page_title: "📱 機能性アプリ開発",
+                page_subtitle: "ユーザーの日常をより便利で効率的にする実用的なモバイルアプリ",
+                studytimer_desc: "科学的な学習方法論に基づいたスマートタイマーアプリ。ポモドーロ、Flowtime、52/17ルールなど5つの学習モードと親子連携機能を提供します。",
+                tag_study: "学習管理",
+                tag_timer: "タイマー",
+                view_more: "詳細を見る →",
+                footer_slogan: "夢を忘れず、挑戦し続ける"
+            }
+        };
+
+        // 현재 언어 (기본값: 한국어)
+        let currentLang = localStorage.getItem('language') || 'ko';
+
+        // 언어 변경 함수
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+
+            // 모든 번역 요소 업데이트
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // 언어 버튼 활성화 상태 변경
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // 페이지 로드 시 저장된 언어로 설정
+        function initLanguage() {
+            const lang = localStorage.getItem('language') || 'ko';
+            if (lang !== 'ko') {
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+            }
+
+            // 언어 버튼 활성화 상태 설정
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes('한국어') && lang === 'ko') btn.classList.add('active');
+                if (btn.textContent.includes('English') && lang === 'en') btn.classList.add('active');
+                if (btn.textContent.includes('日本語') && lang === 'ja') btn.classList.add('active');
+            });
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initLanguage(); // 언어 초기화
+        });
+    </script>
 </body>
 </html>
