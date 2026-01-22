@@ -1,0 +1,14 @@
+# Data folder - contains markdown files and resources not needed in repository
+data/
+
+# Temporary files
+tmp*
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/

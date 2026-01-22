@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SteadyCam - 카메라 안정화 연습</title>
+    <meta name="description" content="실시간 흔들림 감지로 영상 촬영 실력을 향상시키는 연습용 앱. 챌린지와 통계로 재미있게 연습하세요.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: #667eea;
+            margin: 30px 0 20px;
+            font-size: 2em;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .challenges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .challenge-card {
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+        }
+
+        .challenge-card h4 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .preset-card {
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #764ba2;
+        }
+
+        .preset-card h4 {
+            margin-bottom: 10px;
+            color: #764ba2;
+        }
+
+        .download-section {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin: 40px 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 20px 10px;
+            transition: transform 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .specs {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .specs ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .specs li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .specs li:last-child {
+            border-bottom: none;
+        }
+
+        .premium-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .premium-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .premium-item {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkmark {
+            color: #667eea;
+            font-size: 1.5em;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .language-switcher {
+                gap: 0.3rem;
+            }
+
+            .lang-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">DFD</a>
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="changeLanguage('ko')">한국어</button>
+                <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" onclick="changeLanguage('ja')">日本語</button>
+                <button class="lang-btn" onclick="changeLanguage('zh')">中文</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1 data-lang-key="app_title">📹 SteadyCam</h1>
+            <p data-lang-key="app_subtitle">카메라 안정화 연습 - 전문가 수준의 안정적인 영상 촬영</p>
+        </header>
+
+        <div class="content">
+            <section>
+                <h2 data-lang-key="intro_title">영상 촬영의 첫 걸음</h2>
+                <p data-lang-key="intro_desc">
+                    영상 촬영할 때 손떨림이 고민이신가요? 짐벌 없이도 부드러운 영상을 찍고 싶으신가요?<br><br>
+                    SteadyCam은 스마트폰의 정밀한 센서를 활용하여 실시간으로 카메라 흔들림을 감지하고,
+                    여러분의 촬영 기술 향상을 도와주는 연습용 앱입니다.
+                </p>
+            </section>
+
+            <section>
+                <h2 data-lang-key="features_title">주요 기능</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="emoji">📊</div>
+                        <h3 data-lang-key="feature_realtime_title">실시간 흔들림 감지</h3>
+                        <p data-lang-key="feature_realtime_desc">자이로스코프 센서로 정밀한 흔들림을 측정하고 실시간 안정도 점수(0-100)를 표시합니다. 흔들림 정도에 따른 색상 피드백과 수평선 표시 기능을 제공합니다.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="emoji">🎥</div>
+                        <h3 data-lang-key="feature_recording_title">비디오 녹화 & 분석</h3>
+                        <p data-lang-key="feature_recording_desc">촬영과 동시에 센서 데이터를 기록하고, 타임라인 그래프로 흔들림이 심한 구간을 자동으로 마킹합니다. CSV, JSON, PDF로 데이터를 내보낼 수 있습니다.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="emoji">🎯</div>
+                        <h3 data-lang-key="feature_challenge_title">챌린지 모드</h3>
+                        <p data-lang-key="feature_challenge_desc">5가지 내장 챌린지로 목표를 설정하고 재미있게 연습하세요. 시간 제한 내 안정도를 유지하며 S/A/B/C 등급 평가를 받을 수 있습니다.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="emoji">⚙️</div>
+                        <h3 data-lang-key="feature_preset_title">상황별 프리셋</h3>
+                        <p data-lang-key="feature_preset_desc">걷기, 달리기, 차량, 핸드헬드, 짐벌 등 5가지 내장 프리셋으로 상황에 맞게 촬영하세요. 나만의 커스텀 프리셋도 생성할 수 있습니다.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="emoji">📈</div>
+                        <h3 data-lang-key="feature_stats_title">통계 대시보드</h3>
+                        <p data-lang-key="feature_stats_desc">총 연습 시간과 녹화 수를 추적하고, 주간/월간 진행 상황 그래프와 평균 안정도 점수 트렌드를 확인할 수 있습니다.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="emoji">🌍</div>
+                        <h3 data-lang-key="feature_language_title">다국어 지원</h3>
+                        <p data-lang-key="feature_language_desc">한국어, English, 日本語, 中文(简体) 4개 언어를 지원하여 전 세계 사용자가 편리하게 사용할 수 있습니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 data-lang-key="challenges_title">챌린지 모드</h2>
+                <p data-lang-key="challenges_desc">5가지 내장 챌린지로 촬영 실력을 단계별로 향상시키세요.</p>
+                <div class="challenges">
+                    <div class="challenge-card">
+                        <h4>⏱️ <span data-lang-key="challenge_1_title">10초 버티기</span></h4>
+                        <p data-lang-key="challenge_1_desc">기본적인 안정도 유지 연습</p>
+                    </div>
+                    <div class="challenge-card">
+                        <h4>⏰ <span data-lang-key="challenge_2_title">30초 마스터</span></h4>
+                        <p data-lang-key="challenge_2_desc">중급 난이도의 안정화 훈련</p>
+                    </div>
+                    <div class="challenge-card">
+                        <h4>🏆 <span data-lang-key="challenge_3_title">1분 챌린지</span></h4>
+                        <p data-lang-key="challenge_3_desc">장시간 안정도 유지 도전</p>
+                    </div>
+                    <div class="challenge-card">
+                        <h4>🚶 <span data-lang-key="challenge_4_title">걷기 촬영</span></h4>
+                        <p data-lang-key="challenge_4_desc">이동 중 안정적인 촬영 연습</p>
+                    </div>
+                    <div class="challenge-card">
+                        <h4>🪜 <span data-lang-key="challenge_5_title">계단 챌린지</span></h4>
+                        <p data-lang-key="challenge_5_desc">난이도 높은 상황에서의 촬영</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 data-lang-key="presets_title">상황별 프리셋</h2>
+                <p data-lang-key="presets_desc">다양한 촬영 상황에 최적화된 프리셋을 선택하세요.</p>
+                <div class="presets">
+                    <div class="preset-card">
+                        <h4>🚶 <span data-lang-key="preset_1_title">걷기</span></h4>
+                        <p data-lang-key="preset_1_desc">보행 중 촬영에 최적화</p>
+                    </div>
+                    <div class="preset-card">
+                        <h4>🏃 <span data-lang-key="preset_2_title">달리기</span></h4>
+                        <p data-lang-key="preset_2_desc">격렬한 움직임 대응</p>
+                    </div>
+                    <div class="preset-card">
+                        <h4>🚗 <span data-lang-key="preset_3_title">차량</span></h4>
+                        <p data-lang-key="preset_3_desc">차량 이동 중 촬영</p>
+                    </div>
+                    <div class="preset-card">
+                        <h4>✋ <span data-lang-key="preset_4_title">핸드헬드</span></h4>
+                        <p data-lang-key="preset_4_desc">정지 상태 손 촬영</p>
+                    </div>
+                    <div class="preset-card">
+                        <h4>🎬 <span data-lang-key="preset_5_title">짐벌</span></h4>
+                        <p data-lang-key="preset_5_desc">짐벌 사용 시 미세 조정</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="premium-section">
+                <h2 data-lang-key="premium_title">💎 프리미엄 구독</h2>
+                <p data-lang-key="premium_intro">무료 버전으로도 기본 기능을 충분히 사용할 수 있습니다. 프리미엄 구독 시 더 많은 기능을 이용하세요:</p>
+                <div class="premium-features">
+                    <div class="premium-item">
+                        <span class="checkmark">✓</span>
+                        <span data-lang-key="premium_1">무제한 녹화 시간 (무료: 1분)</span>
+                    </div>
+                    <div class="premium-item">
+                        <span class="checkmark">✓</span>
+                        <span data-lang-key="premium_2">무제한 일일 챌린지 (무료: 3회)</span>
+                    </div>
+                    <div class="premium-item">
+                        <span class="checkmark">✓</span>
+                        <span data-lang-key="premium_3">PDF 분석 리포트 생성</span>
+                    </div>
+                    <div class="premium-item">
+                        <span class="checkmark">✓</span>
+                        <span data-lang-key="premium_4">무제한 커스텀 프리셋 (무료: 3개)</span>
+                    </div>
+                    <div class="premium-item">
+                        <span class="checkmark">✓</span>
+                        <span data-lang-key="premium_5">모든 광고 제거</span>
+                    </div>
+                    <div class="premium-item">
+                        <span class="checkmark">✓</span>
+                        <span data-lang-key="premium_6">우선 고객 지원</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 data-lang-key="recommended_title">🎬 이런 분들께 추천합니다</h2>
+                <div class="specs">
+                    <ul>
+                        <li data-lang-key="recommended_1">📱 유튜브, 틱톡 등 영상 콘텐츠 크리에이터</li>
+                        <li data-lang-key="recommended_2">📹 브이로그를 시작하려는 분</li>
+                        <li data-lang-key="recommended_3">🎥 짐벌 없이 안정적인 촬영을 원하는 분</li>
+                        <li data-lang-key="recommended_4">📈 영상 촬영 실력을 체계적으로 향상시키고 싶은 분</li>
+                        <li data-lang-key="recommended_5">📊 촬영 기술을 수치로 확인하고 싶은 분</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2 data-lang-key="specs_title">📱 권장 사양</h2>
+                <div class="specs">
+                    <ul>
+                        <li><strong data-lang-key="specs_os">운영체제:</strong> <span data-lang-key="specs_os_value">Android 8.0 (Oreo) 이상</span></li>
+                        <li><strong data-lang-key="specs_sensor">센서:</strong> <span data-lang-key="specs_sensor_value">자이로스코프 센서 필수</span></li>
+                        <li><strong data-lang-key="specs_permission">권한:</strong> <span data-lang-key="specs_permission_value">카메라, 저장소</span></li>
+                        <li><strong data-lang-key="specs_storage">저장공간:</strong> <span data-lang-key="specs_storage_value">약 50MB</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="download-section">
+                <h2 data-lang-key="download_title">지금 다운로드하세요!</h2>
+                <p data-lang-key="download_desc">영상 촬영의 첫 걸음, SteadyCam과 함께하세요</p>
+                <a href="#" class="download-btn" data-lang-key="download_playstore">📱 Google Play에서 다운로드</a>
+                <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;" data-lang-key="download_coming">곧 출시 예정입니다!</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 DFD (Don't Forget Dream). All rights reserved.</p>
+            <div style="margin-top: 20px;">
+                <a href="/steadycam/privacy" data-lang-key="footer_privacy">개인정보처리방침</a> |
+                <a href="/steadycam/terms" data-lang-key="footer_terms">이용약관</a> |
+                <a href="/#contact" data-lang-key="footer_contact">문의하기</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 다중 언어 지원
+        const translations = {
+            ko: {
+                app_title: "📹 SteadyCam",
+                app_subtitle: "카메라 안정화 연습 - 전문가 수준의 안정적인 영상 촬영",
+                intro_title: "영상 촬영의 첫 걸음",
+                intro_desc: "영상 촬영할 때 손떨림이 고민이신가요? 짐벌 없이도 부드러운 영상을 찍고 싶으신가요?<br><br>SteadyCam은 스마트폰의 정밀한 센서를 활용하여 실시간으로 카메라 흔들림을 감지하고, 여러분의 촬영 기술 향상을 도와주는 연습용 앱입니다.",
+                features_title: "주요 기능",
+                feature_realtime_title: "실시간 흔들림 감지",
+                feature_realtime_desc: "자이로스코프 센서로 정밀한 흔들림을 측정하고 실시간 안정도 점수(0-100)를 표시합니다. 흔들림 정도에 따른 색상 피드백과 수평선 표시 기능을 제공합니다.",
+                feature_recording_title: "비디오 녹화 & 분석",
+                feature_recording_desc: "촬영과 동시에 센서 데이터를 기록하고, 타임라인 그래프로 흔들림이 심한 구간을 자동으로 마킹합니다. CSV, JSON, PDF로 데이터를 내보낼 수 있습니다.",
+                feature_challenge_title: "챌린지 모드",
+                feature_challenge_desc: "5가지 내장 챌린지로 목표를 설정하고 재미있게 연습하세요. 시간 제한 내 안정도를 유지하며 S/A/B/C 등급 평가를 받을 수 있습니다.",
+                feature_preset_title: "상황별 프리셋",
+                feature_preset_desc: "걷기, 달리기, 차량, 핸드헬드, 짐벌 등 5가지 내장 프리셋으로 상황에 맞게 촬영하세요. 나만의 커스텀 프리셋도 생성할 수 있습니다.",
+                feature_stats_title: "통계 대시보드",
+                feature_stats_desc: "총 연습 시간과 녹화 수를 추적하고, 주간/월간 진행 상황 그래프와 평균 안정도 점수 트렌드를 확인할 수 있습니다.",
+                feature_language_title: "다국어 지원",
+                feature_language_desc: "한국어, English, 日本語, 中文(简体) 4개 언어를 지원하여 전 세계 사용자가 편리하게 사용할 수 있습니다.",
+                challenges_title: "챌린지 모드",
+                challenges_desc: "5가지 내장 챌린지로 촬영 실력을 단계별로 향상시키세요.",
+                challenge_1_title: "10초 버티기",
+                challenge_1_desc: "기본적인 안정도 유지 연습",
+                challenge_2_title: "30초 마스터",
+                challenge_2_desc: "중급 난이도의 안정화 훈련",
+                challenge_3_title: "1분 챌린지",
+                challenge_3_desc: "장시간 안정도 유지 도전",
+                challenge_4_title: "걷기 촬영",
+                challenge_4_desc: "이동 중 안정적인 촬영 연습",
+                challenge_5_title: "계단 챌린지",
+                challenge_5_desc: "난이도 높은 상황에서의 촬영",
+                presets_title: "상황별 프리셋",
+                presets_desc: "다양한 촬영 상황에 최적화된 프리셋을 선택하세요.",
+                preset_1_title: "걷기",
+                preset_1_desc: "보행 중 촬영에 최적화",
+                preset_2_title: "달리기",
+                preset_2_desc: "격렬한 움직임 대응",
+                preset_3_title: "차량",
+                preset_3_desc: "차량 이동 중 촬영",
+                preset_4_title: "핸드헬드",
+                preset_4_desc: "정지 상태 손 촬영",
+                preset_5_title: "짐벌",
+                preset_5_desc: "짐벌 사용 시 미세 조정",
+                premium_title: "💎 프리미엄 구독",
+                premium_intro: "무료 버전으로도 기본 기능을 충분히 사용할 수 있습니다. 프리미엄 구독 시 더 많은 기능을 이용하세요:",
+                premium_1: "무제한 녹화 시간 (무료: 1분)",
+                premium_2: "무제한 일일 챌린지 (무료: 3회)",
+                premium_3: "PDF 분석 리포트 생성",
+                premium_4: "무제한 커스텀 프리셋 (무료: 3개)",
+                premium_5: "모든 광고 제거",
+                premium_6: "우선 고객 지원",
+                recommended_title: "🎬 이런 분들께 추천합니다",
+                recommended_1: "📱 유튜브, 틱톡 등 영상 콘텐츠 크리에이터",
+                recommended_2: "📹 브이로그를 시작하려는 분",
+                recommended_3: "🎥 짐벌 없이 안정적인 촬영을 원하는 분",
+                recommended_4: "📈 영상 촬영 실력을 체계적으로 향상시키고 싶은 분",
+                recommended_5: "📊 촬영 기술을 수치로 확인하고 싶은 분",
+                specs_title: "📱 권장 사양",
+                specs_os: "운영체제:",
+                specs_os_value: "Android 8.0 (Oreo) 이상",
+                specs_sensor: "센서:",
+                specs_sensor_value: "자이로스코프 센서 필수",
+                specs_permission: "권한:",
+                specs_permission_value: "카메라, 저장소",
+                specs_storage: "저장공간:",
+                specs_storage_value: "약 50MB",
+                download_title: "지금 다운로드하세요!",
+                download_desc: "영상 촬영의 첫 걸음, SteadyCam과 함께하세요",
+                download_playstore: "📱 Google Play에서 다운로드",
+                download_coming: "곧 출시 예정입니다!",
+                footer_privacy: "개인정보처리방침",
+                footer_terms: "이용약관",
+                footer_contact: "문의하기"
+            },
+            en: {
+                app_title: "📹 SteadyCam",
+                app_subtitle: "Camera Stabilizer Practice - Professional-Quality Stable Video",
+                intro_title: "Your Journey to Better Videos",
+                intro_desc: "Struggling with shaky footage? Want smooth videos without a gimbal?<br><br>SteadyCam uses your smartphone's precision sensors to detect camera shake in real-time, helping you improve your filming technique through practice.",
+                features_title: "Key Features",
+                feature_realtime_title: "Real-Time Shake Detection",
+                feature_realtime_desc: "Measure precise shake using gyroscope sensors and display real-time stability score (0-100). Provides color feedback based on shake intensity and horizon line display.",
+                feature_recording_title: "Video Recording & Analysis",
+                feature_recording_desc: "Record sensor data simultaneously with video, and automatically mark high-shake sections with timeline graphs. Export data as CSV, JSON, or PDF.",
+                feature_challenge_title: "Challenge Mode",
+                feature_challenge_desc: "Set goals with 5 built-in challenges and practice with fun. Maintain stability within time limits and receive S/A/B/C grade evaluation.",
+                feature_preset_title: "Situation-Based Presets",
+                feature_preset_desc: "Film according to the situation with 5 built-in presets: walking, running, vehicle, handheld, gimbal. Create your own custom presets too.",
+                feature_stats_title: "Statistics Dashboard",
+                feature_stats_desc: "Track total practice time and recording count, and check weekly/monthly progress graphs and average stability score trends.",
+                feature_language_title: "Multi-Language Support",
+                feature_language_desc: "Supports 4 languages: Korean, English, Japanese, and Simplified Chinese for convenient use by users worldwide.",
+                challenges_title: "Challenge Mode",
+                challenges_desc: "Improve your filming skills step by step with 5 built-in challenges.",
+                challenge_1_title: "10-Second Hold",
+                challenge_1_desc: "Basic stability practice",
+                challenge_2_title: "30-Second Master",
+                challenge_2_desc: "Intermediate stabilization training",
+                challenge_3_title: "1-Minute Challenge",
+                challenge_3_desc: "Long-duration stability challenge",
+                challenge_4_title: "Walking Shot",
+                challenge_4_desc: "Practice stable filming while moving",
+                challenge_5_title: "Stairs Challenge",
+                challenge_5_desc: "Filming in challenging situations",
+                presets_title: "Situation-Based Presets",
+                presets_desc: "Choose presets optimized for various filming situations.",
+                preset_1_title: "Walking",
+                preset_1_desc: "Optimized for walking shots",
+                preset_2_title: "Running",
+                preset_2_desc: "For intense movement",
+                preset_3_title: "Vehicle",
+                preset_3_desc: "In-car filming",
+                preset_4_title: "Handheld",
+                preset_4_desc: "Stationary handheld shots",
+                preset_5_title: "Gimbal",
+                preset_5_desc: "Fine-tuning with gimbal",
+                premium_title: "💎 Premium Subscription",
+                premium_intro: "The free version includes all basic features. Unlock more with Premium:",
+                premium_1: "Unlimited recording time (Free: 1 minute)",
+                premium_2: "Unlimited daily challenges (Free: 3 per day)",
+                premium_3: "PDF analysis report generation",
+                premium_4: "Unlimited custom presets (Free: 3)",
+                premium_5: "Ad-free experience",
+                premium_6: "Priority customer support",
+                recommended_title: "🎬 Perfect For",
+                recommended_1: "📱 YouTube, TikTok, and video content creators",
+                recommended_2: "📹 Aspiring vloggers",
+                recommended_3: "🎥 Anyone wanting stable footage without a gimbal",
+                recommended_4: "📈 Those looking to systematically improve filming skills",
+                recommended_5: "📊 Users who want measurable progress in their technique",
+                specs_title: "📱 Requirements",
+                specs_os: "OS:",
+                specs_os_value: "Android 8.0 (Oreo) or higher",
+                specs_sensor: "Sensor:",
+                specs_sensor_value: "Gyroscope sensor required",
+                specs_permission: "Permissions:",
+                specs_permission_value: "Camera, Storage",
+                specs_storage: "Storage:",
+                specs_storage_value: "Approx. 50MB",
+                download_title: "Download Now!",
+                download_desc: "Start your journey to better videos with SteadyCam",
+                download_playstore: "📱 Download on Google Play",
+                download_coming: "Coming Soon!",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                footer_contact: "Contact"
+            },
+            ja: {
+                app_title: "📹 SteadyCam",
+                app_subtitle: "カメラ安定化練習 - プロ級の安定した動画撮影",
+                intro_title: "滑らかな動画撮影への第一歩",
+                intro_desc: "動画撮影時の手ブレにお悩みですか？ジンバルなしでも滑らかな動画を撮りたいですか？<br><br>SteadyCamは、スマートフォンの精密センサーを活用してカメラの揺れをリアルタイムで検出し、撮影テクニックの向上をサポートする練習用アプリです。",
+                features_title: "主な機能",
+                feature_realtime_title: "リアルタイム手ブレ検出",
+                feature_realtime_desc: "ジャイロスコープセンサーによる精密な揺れ測定とリアルタイム安定度スコア(0-100)表示。揺れの程度に応じた色フィードバックと水平線表示機能を提供します。",
+                feature_recording_title: "ビデオ録画 & 分析",
+                feature_recording_desc: "撮影と同時にセンサーデータを記録し、タイムライングラフで揺れが激しい区間を自動マーキング。CSV、JSON、PDFでデータをエクスポートできます。",
+                feature_challenge_title: "チャレンジモード",
+                feature_challenge_desc: "5つの内蔵チャレンジで目標を設定し、楽しく練習。制限時間内に安定度を維持し、S/A/B/Cグレード評価を受けられます。",
+                feature_preset_title: "シーン別プリセット",
+                feature_preset_desc: "ウォーキング、ランニング、車両、ハンドヘルド、ジンバルなど5つの内蔵プリセットで状況に合わせて撮影。オリジナルのカスタムプリセットも作成できます。",
+                feature_stats_title: "統計ダッシュボード",
+                feature_stats_desc: "総練習時間と録画数を追跡し、週間/月間進捗グラフと平均安定度スコアのトレンドを確認できます。",
+                feature_language_title: "多言語対応",
+                feature_language_desc: "韓国語、英語、日本語、簡体字中国語の4言語に対応し、世界中のユーザーが便利に使用できます。",
+                challenges_title: "チャレンジモード",
+                challenges_desc: "5つの内蔵チャレンジで撮影スキルを段階的に向上させましょう。",
+                challenge_1_title: "10秒キープ",
+                challenge_1_desc: "基本的な安定度維持練習",
+                challenge_2_title: "30秒マスター",
+                challenge_2_desc: "中級難易度の安定化訓練",
+                challenge_3_title: "1分チャレンジ",
+                challenge_3_desc: "長時間安定度維持への挑戦",
+                challenge_4_title: "ウォーキング撮影",
+                challenge_4_desc: "移動中の安定した撮影練習",
+                challenge_5_title: "階段チャレンジ",
+                challenge_5_desc: "難易度の高い状況での撮影",
+                presets_title: "シーン別プリセット",
+                presets_desc: "様々な撮影状況に最適化されたプリセットを選択してください。",
+                preset_1_title: "ウォーキング",
+                preset_1_desc: "歩行中の撮影に最適化",
+                preset_2_title: "ランニング",
+                preset_2_desc: "激しい動きに対応",
+                preset_3_title: "車両",
+                preset_3_desc: "車内での撮影",
+                preset_4_title: "ハンドヘルド",
+                preset_4_desc: "静止状態での手持ち撮影",
+                preset_5_title: "ジンバル",
+                preset_5_desc: "ジンバル使用時の微調整",
+                premium_title: "💎 プレミアムサブスクリプション",
+                premium_intro: "無料版でも基本機能を十分にご利用いただけます。プレミアムでさらに多くの機能をアンロック：",
+                premium_1: "無制限の録画時間 (無料：1分)",
+                premium_2: "無制限の1日チャレンジ (無料：3回)",
+                premium_3: "PDF分析レポート生成",
+                premium_4: "無制限のカスタムプリセット (無料：3個)",
+                premium_5: "広告非表示",
+                premium_6: "優先カスタマーサポート",
+                recommended_title: "🎬 こんな方におすすめ",
+                recommended_1: "📱 YouTube、TikTokなどの動画コンテンツクリエイター",
+                recommended_2: "📹 Vlogを始めたい方",
+                recommended_3: "🎥 ジンバルなしで安定した撮影をしたい方",
+                recommended_4: "📈 撮影スキルを体系的に向上させたい方",
+                recommended_5: "📊 撮影テクニックを数値で確認したい方",
+                specs_title: "📱 動作要件",
+                specs_os: "OS:",
+                specs_os_value: "Android 8.0 (Oreo) 以上",
+                specs_sensor: "センサー:",
+                specs_sensor_value: "ジャイロスコープセンサー必須",
+                specs_permission: "権限:",
+                specs_permission_value: "カメラ、ストレージ",
+                specs_storage: "ストレージ:",
+                specs_storage_value: "約50MB",
+                download_title: "今すぐダウンロード！",
+                download_desc: "動画撮影の第一歩、SteadyCamと一緒に始めましょう",
+                download_playstore: "📱 Google Playでダウンロード",
+                download_coming: "近日公開予定！",
+                footer_privacy: "プライバシーポリシー",
+                footer_terms: "利用規約",
+                footer_contact: "お問い合わせ"
+            },
+            zh: {
+                app_title: "📹 SteadyCam",
+                app_subtitle: "相机稳定练习 - 专业级稳定视频拍摄",
+                intro_title: "通往更好视频的第一步",
+                intro_desc: "视频拍摄时手抖困扰您吗？想要在没有稳定器的情况下拍摄流畅的视频吗？<br><br>SteadyCam利用智能手机的精密传感器实时检测相机抖动，帮助您通过练习提高拍摄技术。",
+                features_title: "主要功能",
+                feature_realtime_title: "实时抖动检测",
+                feature_realtime_desc: "使用陀螺仪传感器测量精确抖动并显示实时稳定度评分(0-100)。根据抖动强度提供颜色反馈和水平线显示。",
+                feature_recording_title: "视频录制与分析",
+                feature_recording_desc: "同时录制传感器数据和视频，并通过时间线图表自动标记高抖动部分。可导出CSV、JSON或PDF格式数据。",
+                feature_challenge_title: "挑战模式",
+                feature_challenge_desc: "通过5个内置挑战设定目标并有趣地练习。在时间限制内保持稳定性并获得S/A/B/C等级评价。",
+                feature_preset_title: "场景预设",
+                feature_preset_desc: "通过5个内置预设根据场景拍摄：步行、跑步、车辆、手持、稳定器。也可创建自定义预设。",
+                feature_stats_title: "统计仪表板",
+                feature_stats_desc: "跟踪总练习时间和录制次数，查看周/月进度图表和平均稳定度评分趋势。",
+                feature_language_title: "多语言支持",
+                feature_language_desc: "支持韩语、英语、日语和简体中文4种语言，方便全球用户使用。",
+                challenges_title: "挑战模式",
+                challenges_desc: "通过5个内置挑战逐步提高您的拍摄技能。",
+                challenge_1_title: "10秒保持",
+                challenge_1_desc: "基础稳定性练习",
+                challenge_2_title: "30秒大师",
+                challenge_2_desc: "中级稳定化训练",
+                challenge_3_title: "1分钟挑战",
+                challenge_3_desc: "长时间稳定性挑战",
+                challenge_4_title: "步行拍摄",
+                challenge_4_desc: "移动中的稳定拍摄练习",
+                challenge_5_title: "楼梯挑战",
+                challenge_5_desc: "高难度场景拍摄",
+                presets_title: "场景预设",
+                presets_desc: "选择针对各种拍摄场景优化的预设。",
+                preset_1_title: "步行",
+                preset_1_desc: "步行拍摄优化",
+                preset_2_title: "跑步",
+                preset_2_desc: "剧烈运动对应",
+                preset_3_title: "车辆",
+                preset_3_desc: "车内拍摄",
+                preset_4_title: "手持",
+                preset_4_desc: "静止状态手持拍摄",
+                preset_5_title: "稳定器",
+                preset_5_desc: "使用稳定器时的微调",
+                premium_title: "💎 高级订阅",
+                premium_intro: "免费版本包含所有基本功能。升级高级版解锁更多功能：",
+                premium_1: "无限录制时间（免费：1分钟）",
+                premium_2: "无限每日挑战（免费：每天3次）",
+                premium_3: "PDF分析报告生成",
+                premium_4: "无限自定义预设（免费：3个）",
+                premium_5: "无广告体验",
+                premium_6: "优先客户支持",
+                recommended_title: "🎬 适合人群",
+                recommended_1: "📱 YouTube、TikTok等视频内容创作者",
+                recommended_2: "📹 有志成为视频博主的人",
+                recommended_3: "🎥 想要在没有稳定器的情况下拍摄稳定视频的人",
+                recommended_4: "📈 希望系统性提高拍摄技能的人",
+                recommended_5: "📊 想要量化跟踪拍摄进步的用户",
+                specs_title: "📱 系统要求",
+                specs_os: "操作系统：",
+                specs_os_value: "Android 8.0 (Oreo) 或更高版本",
+                specs_sensor: "传感器：",
+                specs_sensor_value: "需要陀螺仪传感器",
+                specs_permission: "权限：",
+                specs_permission_value: "相机、存储",
+                specs_storage: "存储空间：",
+                specs_storage_value: "约50MB",
+                download_title: "立即下载！",
+                download_desc: "与SteadyCam一起开始您的视频之旅",
+                download_playstore: "📱 在Google Play下载",
+                download_coming: "即将推出！",
+                footer_privacy: "隐私政策",
+                footer_terms: "服务条款",
+                footer_contact: "联系我们"
+            }
+        };
+
+        // 현재 언어
+        let currentLang = localStorage.getItem('language') || 'ko';
+
+        // 언어 변경 함수
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+
+            // 모든 번역 요소 업데이트
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // 언어 버튼 활성화 상태 변경
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // 페이지 로드 시 저장된 언어로 설정
+        function initLanguage() {
+            const lang = localStorage.getItem('language') || 'ko';
+            if (lang !== 'ko') {
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+            }
+
+            // 언어 버튼 활성화 상태 설정
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes('한국어') && lang === 'ko') btn.classList.add('active');
+                if (btn.textContent.includes('English') && lang === 'en') btn.classList.add('active');
+                if (btn.textContent.includes('日本語') && lang === 'ja') btn.classList.add('active');
+                if (btn.textContent.includes('中文') && lang === 'zh') btn.classList.add('active');
+            });
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initLanguage();
+        });
+    </script>
+</body>
+</html>
