@@ -92,7 +92,7 @@
     <header>
       <h1>이용약관 / Terms of Service / 利用規約</h1>
       <p>ClueStep — 정적 웹 게임 (Static Web Puzzle Game)</p>
-      <p><a href="/">홈 / Home / ホーム</a> · <a href="/cluestep/">ClueStep 게임 / Play / プレイ</a> · <a href="privacy-policy.html">개인정보처리방침 / Privacy / プライバシー</a></p>
+      <p><a href="/">홈 / Home / ホーム</a> · <a href="/cluestep/">ClueStep 게임 / Play / プレイ</a> · <a id="header-privacy-link" href="privacy-policy.html">개인정보처리방침 / Privacy / プライバシー</a></p>
       <div class="lang-switch">
         <label for="lang-select">언어 / Language / 言語</label>
         <select id="lang-select">
@@ -257,7 +257,7 @@
       <p>
         <a href="/">홈 / Home / ホーム</a> |
         <a href="/cluestep/">ClueStep 게임 / Play / プレイ</a> |
-        <a href="privacy-policy.html">개인정보처리방침 / Privacy / プライバシー</a>
+        <a id="footer-privacy-link" href="privacy-policy.html">개인정보처리방침 / Privacy / プライバシー</a>
       </p>
     </footer>
   </div>
@@ -266,6 +266,7 @@
   'use strict';
   var KEY = 'cluestep-lang-terms';
   var VALID = ['ko', 'en', 'ja'];
+  var PRIVACY_HREF = { ko: 'privacy-policy.html?lang=ko', en: 'privacy-policy.html?lang=en', ja: 'privacy-policy.html?lang=ja' };
   var select = document.getElementById('lang-select');
   var sections = document.querySelectorAll('[data-lang]');
 
@@ -276,6 +277,11 @@
     }
     document.documentElement.lang = lang;
     if (select) { select.value = lang; }
+    var privacyHref = PRIVACY_HREF[lang];
+    var headerPrivacy = document.getElementById('header-privacy-link');
+    if (headerPrivacy && privacyHref) { headerPrivacy.setAttribute('href', privacyHref); }
+    var footerPrivacy = document.getElementById('footer-privacy-link');
+    if (footerPrivacy && privacyHref) { footerPrivacy.setAttribute('href', privacyHref); }
   }
 
   var urlLang = null;
