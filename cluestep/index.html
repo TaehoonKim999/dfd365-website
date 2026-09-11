@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClueStep — 네모로직 (프로토타입)</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #0d0f14;
+        color: #c8d0e0;
+        font: 14px/1.5 system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      h1 { font-size: 16px; font-weight: 600; margin: 0; }
+      #language-bar { display: flex; align-items: center; gap: 6px; font-size: 12px; opacity: 0.78; }
+      p.intro, p.tip { margin: 0; max-width: 620px; text-align: center; opacity: 0.72; }
+      p.tip { font-size: 13px; opacity: 0.58; }
+      canvas {
+        background: #12151c;
+        border-radius: 6px;
+        touch-action: manipulation;
+        max-width: 100%;
+        height: auto;
+      }
+      #bar { display: flex; gap: 8px; align-items: center; min-height: 32px; }
+      #status { font-weight: 600; }
+      button, select {
+        font: inherit;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #333a48;
+        background: #1c202b;
+        color: #e6ebf5;
+        cursor: pointer;
+      }
+      button:hover, select:hover { background: #262c3a; }
+      label { display: flex; align-items: center; gap: 4px; }
+      footer {
+        margin-top: 8px;
+        font-size: 12px;
+        opacity: 0.6;
+      }
+      footer a { color: #8fa3c7; text-decoration: none; }
+      footer a:hover { color: #c8d0e0; text-decoration: underline; }
+      footer .separator { margin: 0 6px; opacity: 0.5; }
+    </style>
+    <script type="module" crossorigin src="/cluestep/assets/index-CKtCZQhC.js"></script>
+  </head>
+  <body>
+    <div id="language-bar">
+      <label for="language" data-i18n="languageLabel">언어</label>
+      <select id="language" aria-label="언어">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+      </select>
+    </div>
+    <h1 data-i18n="title">ClueStep</h1>
+    <p class="intro" data-i18n="intro">행·열 힌트로 벽을 찾으세요. 좌클릭: 벽 · 우클릭: 빈칸</p>
+    <p class="tip" data-i18n="tip">초록 시작점에서 금색 출구까지 길은 하나입니다.</p>
+    <canvas id="board"></canvas>
+    <div id="bar">
+      <span id="status">풀이 중</span>
+      <label for="size"><span data-i18n="sizeLabel">크기</span>
+        <select id="size">
+          <option value="9">9 × 9</option>
+          <option value="11">11 × 11</option>
+          <option value="13" selected>13 × 13</option>
+          <option value="15">15 × 15</option>
+          <option value="17">17 × 17</option>
+        </select>
+      </label>
+      <button id="clear" type="button" data-i18n="clear">지우기</button>
+      <button id="new" type="button" data-i18n="newGame">새 판</button>
+    </div>
+    <footer>
+      <a href="/cluestep/privacy-policy.html" data-i18n="footerPrivacy">개인정보처리방침</a><span class="separator">·</span><a href="/cluestep/terms-of-service.html" data-i18n="footerTerms">이용약관</a>
+    </footer>
+  </body>
+</html>
