@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigating Android LOW_MEMORY exits in Zombie Stealth | DFD Lab</title>
+<meta name="description" content="Notes from investigating Android LOW_MEMORY exits in Zombie Stealth. The root cause is unresolved and the issue remains open.">
+<meta name="author" content="DFD Lab">
+<link rel="canonical" href="https://dfd365.com/devlog/en/android-low-memory">
+<link rel="alternate" hreflang="ko" href="https://dfd365.com/devlog/android-low-memory">
+<link rel="alternate" hreflang="en" href="https://dfd365.com/devlog/en/android-low-memory">
+<link rel="alternate" hreflang="ja" href="https://dfd365.com/devlog/ja/android-low-memory">
+<link rel="alternate" hreflang="x-default" href="https://dfd365.com/devlog/android-low-memory">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DFD Lab">
+<meta property="og:title" content="Investigating Android LOW_MEMORY exits in Zombie Stealth | DFD Lab">
+<meta property="og:description" content="Notes from investigating Android LOW_MEMORY exits in Zombie Stealth. The root cause is unresolved and the issue remains open.">
+<meta property="og:url" content="https://dfd365.com/devlog/en/android-low-memory">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Investigating Android LOW_MEMORY exits in Zombie Stealth | DFD Lab">
+<meta name="twitter:description" content="Notes from investigating Android LOW_MEMORY exits in Zombie Stealth. The root cause is unresolved and the issue remains open.">
+<link rel="stylesheet" href="../devlog.css">
+<script src="../devlog.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<nav class="site-nav" aria-label="Site menu">
+<a class="brand" href="../../index.html">DFD</a>
+<ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="index.html">Devlog</a></li>
+</ul>
+</nav>
+<nav class="lang-switch" aria-label="Language">
+<ul>
+<li><a href="../android-low-memory.html" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+<li><a href="android-low-memory.html" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
+<li><a href="../ja/android-low-memory.html" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+</ul>
+</nav>
+</header>
+<main id="main" tabindex="-1">
+<article>
+<h1>Investigating Android LOW_MEMORY exits in Zombie Stealth</h1>
+<p class="meta">DFD Lab · <time datetime="2026-11-15">November 15, 2026</time></p>
+<p>Zombie Stealth is a turn-based zombie stealth game for mobile. On Android, the game has been exiting around the point where the player enters the operating room. This post covers what the investigation has observed so far and where those observations stop.</p>
+<h2>What the OS recorded</h2>
+<p>In one recorded run, Android&#x27;s low-memory killer terminated the game process, and the system&#x27;s exit record for that launch gave the reason as LOW_MEMORY. This happened during app startup, before I had selected the operating room. The launch tool&#x27;s &quot;ok&quot; meant Android reported that the activity had started, not that the game had rendered a frame.</p>
+<p>That record shows how this one run ended. It doesn&#x27;t account for every earlier exit.</p>
+<h2>A condition that was already present</h2>
+<p>Before the game launched, the device&#x27;s SUnreclaim counter, which is the system&#x27;s accounting of kernel memory it can&#x27;t reclaim, was already high. It remained high after the game exited. A later snapshot, taken while the game wasn&#x27;t running, showed a large nominal object capacity in the generic kmalloc-256 slab cache.</p>
+<p>Neither measurement identifies an owner. The kmalloc-256 figure is an estimate of nominal capacity rather than measured use, and nothing here confirms a leak. This isn&#x27;t evidence against the hardware, the OS or the graphics driver, and it doesn&#x27;t clear the game either.</p>
+<h2>Why a later clean run isn&#x27;t an answer</h2>
+<p>A later session completed a requested five-minute system trace, collecting system counter samples and app memory snapshots. The normal game screen was confirmed during the trace. This was system observation, not a five-minute playtest. No new LOW_MEMORY exit was observed, and the exit records before and after the trace were identical. Kernel memory pressure was also lower than during the earlier failure.</p>
+<p>A run where the problem didn&#x27;t appear, under milder conditions, isn&#x27;t a fix. The trace didn&#x27;t establish true peak memory usage, and it doesn&#x27;t show that the game is stable.</p>
+<h2>Where things stand</h2>
+<p>The root cause is unresolved. I&#x27;ve paused the LOW_MEMORY investigation, and the issue remains open and unfixed. Work has resumed on environment art.</p>
+<h2>Related X thread</h2>
+<ul class="x-links"><li><a href="https://x.com/DFD_Lab/status/2121779251099910376" rel="noopener">https://x.com/DFD_Lab/status/2121779251099910376</a></li><li><a href="https://x.com/DFD_Lab/status/2121779253222293913" rel="noopener">https://x.com/DFD_Lab/status/2121779253222293913</a></li></ul>
+</article>
+</main>
+<footer class="site-footer">
+<p>DFD Lab</p>
+<ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="index.html">Devlog</a></li>
+<li><a href="https://x.com/DFD_Lab">X @DFD_Lab</a></li>
+</ul>
+</footer>
+</body>
+</html>

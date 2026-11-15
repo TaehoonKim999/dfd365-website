@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zombie StealthのAndroid LOW_MEMORY終了を調べる | DFD Lab</title>
+<meta name="description" content="Zombie StealthのAndroid LOW_MEMORY終了についての調査記録です。根本原因はまだわかっておらず、問題は未解決のままです。">
+<meta name="author" content="DFD Lab">
+<link rel="canonical" href="https://dfd365.com/devlog/ja/android-low-memory">
+<link rel="alternate" hreflang="ko" href="https://dfd365.com/devlog/android-low-memory">
+<link rel="alternate" hreflang="en" href="https://dfd365.com/devlog/en/android-low-memory">
+<link rel="alternate" hreflang="ja" href="https://dfd365.com/devlog/ja/android-low-memory">
+<link rel="alternate" hreflang="x-default" href="https://dfd365.com/devlog/android-low-memory">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DFD Lab">
+<meta property="og:title" content="Zombie StealthのAndroid LOW_MEMORY終了を調べる | DFD Lab">
+<meta property="og:description" content="Zombie StealthのAndroid LOW_MEMORY終了についての調査記録です。根本原因はまだわかっておらず、問題は未解決のままです。">
+<meta property="og:url" content="https://dfd365.com/devlog/ja/android-low-memory">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zombie StealthのAndroid LOW_MEMORY終了を調べる | DFD Lab">
+<meta name="twitter:description" content="Zombie StealthのAndroid LOW_MEMORY終了についての調査記録です。根本原因はまだわかっておらず、問題は未解決のままです。">
+<link rel="stylesheet" href="../devlog.css">
+<script src="../devlog.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">本文へスキップ</a>
+<header class="site-header">
+<nav class="site-nav" aria-label="サイトメニュー">
+<a class="brand" href="../../index.html">DFD</a>
+<ul>
+<li><a href="../../index.html">ホーム</a></li>
+<li><a href="index.html">開発ログ</a></li>
+</ul>
+</nav>
+<nav class="lang-switch" aria-label="言語">
+<ul>
+<li><a href="../android-low-memory.html" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+<li><a href="../en/android-low-memory.html" hreflang="en" lang="en" data-lang="en">English</a></li>
+<li><a href="android-low-memory.html" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+</ul>
+</nav>
+</header>
+<main id="main" tabindex="-1">
+<article>
+<h1>Zombie StealthのAndroid LOW_MEMORY終了を調べる</h1>
+<p class="meta">DFD Lab · <time datetime="2026-11-15">2026年11月15日</time></p>
+<p>Zombie Stealthは、モバイル向けのターン制ゾンビステルスゲームです。Android版では、プレイヤーが手術室に入るあたりでゲームが終了してしまう現象が起きていました。この記事では、これまでの調査で観察できたことと、その観察から言えるのはどこまでなのかをまとめます。</p>
+<h2>OSに記録されていたこと</h2>
+<p>記録が残っているある1回の起動では、Androidのローメモリーキラー(low-memory killer)がゲームのプロセスを終了させていて、その起動についてのシステムの終了記録には、理由として LOW_MEMORY が残っていました。これはアプリの起動中、まだ手術室を選ぶ前に起きたものです。起動ツールが返した「ok」は、Androidがアクティビティの開始を報告したという意味で、ゲームがフレームを描画したという意味ではありませんでした。</p>
+<p>この記録からわかるのは、この1回の起動がどう終わったかです。それ以前の終了をすべて説明するものではありません。</p>
+<h2>もともとあった状態</h2>
+<p>ゲームを起動する前の時点で、端末の SUnreclaim カウンター(システムが回収できないカーネルメモリとして計上している量)はすでに高い値でした。ゲームが終了したあとも高いままでした。その後、ゲームを起動していない状態で取ったスナップショットでは、汎用の kmalloc-256 スラブキャッシュに大きな名目上のオブジェクト容量が見られました。</p>
+<p>どちらの測定も、そのメモリの持ち主を特定するものではありません。kmalloc-256 の数値は実測した使用量ではなく、名目上の容量の推定値です。ここにあるものはどれもリークを裏付けていません。ハードウェアやOS、グラフィックスドライバーに問題があるという証拠にはなりませんし、ゲーム側が無関係だという証拠にもなりません。</p>
+<h2>その後の問題なしの実行が答えにならない理由</h2>
+<p>その後のセッションで、依頼した5分間のシステムトレースを最後まで実行し、システムカウンターのサンプルとアプリのメモリスナップショットを集めました。トレース中には通常のゲーム画面が表示されていることも確認しています。ただ、これはあくまでシステムの観察で、5分間プレイテストをしたわけではありません。新たな LOW_MEMORY による終了は観察されず、トレース前後の終了記録も同じでした。カーネルメモリの逼迫具合も、以前の失敗時より低い状態でした。</p>
+<p>より穏やかな条件で問題が出なかった実行があったというだけで、修正できたことにはなりません。このトレースで本当のピークメモリ使用量がわかったわけではなく、ゲームが安定していることを示すものでもありません。</p>
+<h2>現状</h2>
+<p>根本原因はまだわかっていません。LOW_MEMORY の調査はいったん中断していて、この問題は未修正のまま残っています。今は環境アートの制作を再開しています。</p>
+<h2>関連するXスレッド</h2>
+<ul class="x-links"><li><a href="https://x.com/DFD_Lab/status/2121779251099910376" rel="noopener">https://x.com/DFD_Lab/status/2121779251099910376</a></li><li><a href="https://x.com/DFD_Lab/status/2121779253222293913" rel="noopener">https://x.com/DFD_Lab/status/2121779253222293913</a></li></ul>
+</article>
+</main>
+<footer class="site-footer">
+<p>DFD Lab</p>
+<ul>
+<li><a href="../../index.html">ホーム</a></li>
+<li><a href="index.html">開発ログ</a></li>
+<li><a href="https://x.com/DFD_Lab">X @DFD_Lab</a></li>
+</ul>
+</footer>
+</body>
+</html>

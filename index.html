@@ -349,6 +349,41 @@
             transform: translateY(0);
         }
 
+        /* Devlog 모바일 링크 (nav-links가 숨겨지는 화면에서만 표시) */
+        .devlog-mobile-nav {
+            display: none;
+        }
+
+        .devlog-mobile-nav a,
+        .nav-links a#devlog-nav-link,
+        .footer-links a#devlog-footer-link {
+            display: inline-block;
+            min-height: 44px;
+            line-height: 44px;
+        }
+
+        .devlog-mobile-nav a:focus-visible,
+        .nav-links a#devlog-nav-link:focus-visible,
+        .footer-links a#devlog-footer-link:focus-visible {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .devlog-mobile-nav {
+                display: block;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+
+            .devlog-mobile-nav a {
+                color: #333;
+                font-weight: 500;
+                text-decoration: none;
+            }
+        }
+
         /* 반응형 디자인 */
         @media (max-width: 768px) {
             .hero h1 {
@@ -396,6 +431,7 @@
                 <li><a href="#projects" data-lang-key="nav_projects">Projects</a></li>
                 <li><a href="#philosophy" data-lang-key="nav_philosophy">Philosophy</a></li>
                 <li><a href="#contact" data-lang-key="nav_contact">Contact</a></li>
+                <li><a href="devlog/index.html" id="devlog-nav-link" data-lang-key="nav_devlog">개발 일지</a></li>
             </ul>
             <div class="language-switcher">
                 <button class="lang-btn active" onclick="changeLanguage('ko')">한국어</button>
@@ -403,6 +439,9 @@
                 <button class="lang-btn" onclick="changeLanguage('ja')">日本語</button>
             </div>
         </nav>
+        <div class="devlog-mobile-nav">
+            <a href="devlog/index.html" id="devlog-mobile-link" data-lang-key="nav_devlog">개발 일지</a>
+        </div>
     </header>
 
     <!-- 히어로 섹션 -->
@@ -489,6 +528,7 @@
                 <a href="#projects">Projects</a>
                 <a href="#philosophy">Philosophy</a>
                 <a href="#contact">Contact</a>
+                <a href="devlog/index.html" id="devlog-footer-link" data-lang-key="nav_devlog">개발 일지</a>
             </div>
             <p>&copy; 2025 DFD (Don't Forget Dream). All rights reserved.</p>
             <p style="margin-top: 0.5rem; opacity: 0.7;">꿈을 잊지 말고, 계속해서 도전하다</p>
@@ -503,6 +543,7 @@
                 nav_projects: "Projects",
                 nav_philosophy: "Philosophy",
                 nav_contact: "Contact",
+                nav_devlog: "개발 일지",
                 hero_subtitle: "꿈을 잊지 말고, 계속해서 도전하다",
                 hero_description: "어릴 적 가졌던 소중한 꿈들을 현실로 만들어가는 창작 스튜디오입니다.<br>소설, 게임, 앱 개발을 통해 상상을 현실로 바꿔나갑니다.",
                 hero_cta: "프로젝트 보기",
@@ -526,6 +567,7 @@
                 nav_projects: "Projects",
                 nav_philosophy: "Philosophy",
                 nav_contact: "Contact",
+                nav_devlog: "Devlog",
                 hero_subtitle: "Don't forget your dreams, keep challenging yourself",
                 hero_description: "A creative studio bringing childhood dreams to reality.<br>We turn imagination into reality through novels, games, and app development.",
                 hero_cta: "View Projects",
@@ -549,6 +591,7 @@
                 nav_projects: "プロジェクト",
                 nav_philosophy: "理念",
                 nav_contact: "お問い合わせ",
+                nav_devlog: "開発ログ",
                 hero_subtitle: "夢を忘れず、挑戦し続ける",
                 hero_description: "幼い頃に抱いた大切な夢を現実にする創作スタジオです。<br>小説、ゲーム、アプリ開発を通じて想像を現実に変えています。",
                 hero_cta: "プロジェクトを見る",
@@ -581,6 +624,17 @@
             link.href = allowed[lang] || allowed.ko;
         }
 
+        // Devlog 링크를 현재 언어의 목록 페이지(상대 경로)로 갱신
+        // 허용값은 ko/en/ja뿐이며 그 외 값은 한국어 목록으로 대체
+        function updateDevlogLinks(lang) {
+            const allowed = { ko: 'devlog/index.html', en: 'devlog/en/index.html', ja: 'devlog/ja/index.html' };
+            const href = allowed[lang] || allowed.ko;
+            ['devlog-nav-link', 'devlog-mobile-link', 'devlog-footer-link'].forEach(id => {
+                const link = document.getElementById(id);
+                if (link) link.href = href;
+            });
+        }
+
         // 언어 변경 함수
         function changeLanguage(lang) {
             currentLang = lang;
@@ -602,12 +656,14 @@
 
             // ClueStep 링크 URL 갱신
             updateClueStepLink(lang);
+            updateDevlogLinks(lang);
         }
 
         // 페이지 로드 시 저장된 언어로 설정
         function initLanguage() {
             const lang = localStorage.getItem('language') || 'ko';
             updateClueStepLink(lang);
+            updateDevlogLinks(lang);
             if (lang !== 'ko') {
                 document.querySelectorAll('[data-lang-key]').forEach(element => {
                     const key = element.getAttribute('data-lang-key');
